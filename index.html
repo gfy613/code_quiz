@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Code</title>
+    <!-- Bootstrap Format reference -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header>
+<button id="highscoreButton">Highscores</button>
+<span id="timer" class = "float-right mr-2">Time: </span>
+</header>
+
+<div class ="container">
+    <!-- Quiz elements -->
+    <div id = "quiz" class="hide">
+        <!-- Question element -->
+            <h2 id="question">Question</h2>
+        <!-- Answer elements -->
+        <div id = "answer-list">
+            <button id = "answer0" class = "button">Answer 1</button>
+            <button id = "answer1" class = "button">Answer 2</button>
+            <button id = "answer2" class = "button">Answer 3</button>
+            <button id = "answer3" class = "button">Answer 4</button>
+        </div>
+    </div>
+    <div class ="start">
+      <button id="start-button">Start</button>  
+    </div>
+    <div id ="submitScore" class="hide">
+        <h2>Your Score is <span id="userScore">0</span></h2>
+        <form>
+            <div>
+                <input type="text" id=userInitials/>
+            </div>
+            <button id="submit">Submit Highscore</button>
+        </form>
+    </div>
+    <div id="highScore" class = "hide">
+
+
+    </div>
+    <footer>
+        <p id= "answer"></p>
+    </footer>
+</div>
+
+
+
+<!-- Javascript coding -->
+<script src="assets/js/script.js"></script>       
+</body>
+</html>
