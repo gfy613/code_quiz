@@ -12,41 +12,60 @@
 <body>
 <header>
 <button id="highscoreButton">Highscores</button>
-<span id="timer" class = "float-right mr-2">Time: </span>
+<span id="timer" class = "float-right mr-2">Time: 10</span>
 </header>
 
 <div class ="container">
+    <div id ="start">
+        <p>Welcome to my JavaScript quiz! If you get a question correct your score will increase by 10. However if you get a question wrong your time left will decrease by 10 seconds. Click the Start button to begin the quiz.</p>
+        <button id="start-button">Start</button>  
+    </div>
     <!-- Quiz elements -->
     <div id = "quiz" class="hide">
         <!-- Question element -->
             <h2 id="question">Question</h2>
         <!-- Answer elements -->
         <div id = "answer-list">
-            <button id = "answer0" class = "button">Answer 1</button>
-            <button id = "answer1" class = "button">Answer 2</button>
-            <button id = "answer2" class = "button">Answer 3</button>
-            <button id = "answer3" class = "button">Answer 4</button>
+            <!-- Answer buttons go here -->
         </div>
     </div>
-    <div class ="start">
-      <button id="start-button">Start</button>  
-    </div>
+   
     <div id ="submitScore" class="hide">
         <h2>Your Score is <span id="userScore">0</span></h2>
         <form>
             <div>
-                <input type="text" id=userInitials/>
+                <input type="text" id="userInitials"/>
             </div>
             <button id="submit">Submit Highscore</button>
         </form>
     </div>
     <div id="highScore" class = "hide">
-
+        <div class= "row">
+            <strong class = "col-6">
+                Initials
+            </strong>
+            <strong class = "col-6">
+                Score
+            </strong>
 
     </div>
+    
+    
+</div>
+    
     <footer>
-        <p id= "answer"></p>
+        <p id= "answer" class = "hide">Correct</p>
+        <div id="highScoreButtons" class="row hide">
+            <div class = "col-6">
+                <button id="restart">Restart</button>
+            </div>
+            <div class = "col-6">
+                <button id="clearHigh">Clear</button>
+            </div>
+        </div>
     </footer>
+    
+    
 </div>
 
 

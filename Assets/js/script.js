@@ -2,19 +2,23 @@ var timerEl = document.getElementById("timer");
 var quizEl = document.getElementById("quiz");
 var questionEl = document.getElementById("question");
 var answerListEl = document.getElementById("answer-list");
-var startButtonEl = document.getElementById("start-button")
+var startButtonEl = document.getElementById("start")
 var scoreEl = document.getElementById("submitScore")
 var userScoreEl = document.getElementById("userScore")
 var highScoreEl = document.getElementById("highScore")
 var questionNumber = 0;
 var userAnswer = '';
 var score = 0;
-var highScoreArray = [{name: "Gaines",
-                       score: 10,} 
-];
+var userIdEl = document.querySelector("#userInitials")
+// var highScoreArray = [{name: "Gaines",
+//                        score: 1} 
+// ];
+// var highScoreArray = [];
 var submitEl = document.getElementById("submit");
-
-
+var timeLeft = 9;
+var userInt = '';
+var bodyEl =document.querySelectorAll("body");
+var highScoreButEl = document.getElementById("highScoreButtons")
 
 
 // function to start quiz by hiding the start button and unhiding the quiz
@@ -30,7 +34,7 @@ function startGame(){
 
 // // timer script
 function quizTimer(){
-    var timeLeft = 10;
+    
     var timeInterval = setInterval(function(){
         timerEl.textContent = "Time: " + timeLeft;
         timeLeft--;    
@@ -82,7 +86,7 @@ function answerQuestion(){
                 if(questionNumber < myQuestions.length){setNextQuestion()}
                 else{
                     enterHighscore()
-                    timerEl.classList.add("hide")
+                    timeleft = 0
                 }
                 
             }
@@ -91,10 +95,12 @@ function answerQuestion(){
                 questionNumber++                
                 if(questionNumber < myQuestions.length){
                     setNextQuestion()
+                    timeLeft = timeLeft -5
+                    
                 }
                 else{
                     enterHighscore()
-                    timerEl.classList.add("hide")
+                    timeLeft = 0
                 }
             }
         
@@ -107,13 +113,14 @@ function answerQuestion(){
 function enterHighscore(){
     quizEl.classList.add("hide");
     scoreEl.classList.remove("hide");
+    
 }
 
 // Question Arrary
 var myQuestions = [
-    {   question: "question 1",
-        answer:["a","b","c","d"],
-        correctAnswer: "c",
+    {   question: "Primarily, inside which tag of an HTML document do you put the JavaScript?",
+        answer:["<java>", "<body>", "<script>", "<img>"],
+        correctAnswer: "<script>",
     },
     {   question: "question 2",
         answer:["w","x","y","z"],
@@ -125,31 +132,56 @@ var myQuestions = [
 
 submitEl.addEventListener("click", recordHighscore)
 
-function recordHighscore (){
-    
-    highScoreArray.push({name: "g", score: userScore })
-
+function recordHighscore (event){    
+    var userIdEl = document.querySelector("#userInitials")
+    event.preventDefault();   
+    userInt = userIdEl.value
+    console.log(userInt)
+    highScoreArray = JSON.parse(localStorage.getItem("highScoreArray") || "[]")
+    highScoreArray.push({name:userInt,score:score})
+    highScoreArray.sort(function(a,b){
+        return b.score - a.score
+        })    
+    localStorage.setItem("highScoreArray",JSON.stringify(highScoreArray));
     showHighScores()
     console.log(highScoreArray)
+   
 }
-
 
 
 // Create Highscore List
 function showHighScores(){
+  
     console.log("Check")
     scoreEl.classList.add("hide");
     startButtonEl.classList.add("hide");
     highScoreEl.classList.remove("hide");
+    highScoreButEl.classList.remove("hide");
 
     for(var i =0; i<highScoreArray.length;i++){
-        var highScore = highScoreArray[i];
-        var li = document.createElement("li");
-        li.textContent= highScore;
-        li.setAttribute("data-index", i);
-        highScoreEl.appendChild(li);
+
+        var rowEl = document.createElement("div")
+        rowEl.setAttribute("class","row")
+        var intials = document.createElement("div")
+        intials.setAttribute("class","col-6")
+        intials.textContent =  highScoreArray[i].name 
+        var score = document.createElement("div")
+        score.setAttribute("class","col-6")
+        score.textContent = highScoreArray[i].score
+        rowEl.appendChild(intials)
+        rowEl.appendChild(score)
+        highScoreEl.appendChild(rowEl)
     }
 }
+
+
+// clear
+// localStorage.clear();
+// history.back
+
+// restart
+
+// highscore = JSON.parse(localStorage.getItem("highscore")||"[]"),
 
 
 

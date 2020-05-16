@@ -1,8 +1,4 @@
-.container {
-    border-radius: 10px;
-    padding: 10px;
-    border-color: blue;
-}
+
 
 button{
     background-color: blue;
@@ -12,3 +8,37 @@ button{
 .hide{
     display: none;
 }
+
+.recScore{
+    margin-left: 20%;
+}
+
+body{
+
+    background-color: grey;
+}
+/* 
+body.correct{
+    background-color: green;
+}
+body.wrong{
+    background-color: red;
+} */
+
+
+.container {
+    margin-top: 20vh;
+    width: 800px;
+    max-width: 80%;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 0 10px 2px;
+    border-radius: 10px;
+    padding: 10px;
+    border-color: blue;
+  }
+
+  #timer {
+      font-weight: bold;
+  }
