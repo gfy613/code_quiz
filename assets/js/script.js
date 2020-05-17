@@ -20,6 +20,7 @@ var score = 0;
 var mainHighScoreButEl = document.getElementById("highscoreButton")
 var highScoreArray = [];
 var quizInProgress = false;
+var answerEl = document.getElementById("answer")
 
 
 // function to start quiz by hiding the start button and unhiding the quiz
@@ -29,6 +30,7 @@ function startGame(){
     console.log("Start");
     startButtonEl.classList.add("hide");
     quizEl.classList.remove("hide");
+    answerEl.classList.remove("hide");
     quizTimer();  
     setNextQuestion(); 
     quizInProgress = true;
@@ -86,6 +88,7 @@ function resetState() {
                 userScoreEl.textContent = score
                 if(questionNumber < myQuestions.length){
                     setNextQuestion()
+                    answerEl.textContent = "Correct!!!"
                 }
                 else{
                     timeLeft = 0
@@ -98,6 +101,7 @@ function resetState() {
                 if(questionNumber < myQuestions.length){
                     setNextQuestion()
                     timeLeft = timeLeft -5
+                    answerEl.textContent = "Wrong"
                 }
                 else{
                     timeLeft = 0
@@ -109,6 +113,7 @@ function resetState() {
 
 function enterHighscore(){
     quizEl.classList.add("hide");
+    answerEl.classList.add("hide");
     scoreEl.classList.remove("hide");
     
 }
@@ -185,6 +190,7 @@ restartQuizEl.addEventListener("click",function(){
     questionNumber = 0
     timeLeft = 59
     score = 0
+    answerEl.textContent = ""
     startGame()
 });
 
