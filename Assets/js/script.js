@@ -6,19 +6,19 @@ var startButtonEl = document.getElementById("start")
 var scoreEl = document.getElementById("submitScore")
 var userScoreEl = document.getElementById("userScore")
 var highScoreEl = document.getElementById("highScore")
-var questionNumber = 0;
 var userAnswer = '';
-var score = 0;
 var userIdEl = document.querySelector("#userInitials")
-// var highScoreArray = [{name: "Gaines",
-//                        score: 1} 
-// ];
-// var highScoreArray = [];
 var submitEl = document.getElementById("submit");
-var timeLeft = 9;
 var userInt = '';
 var bodyEl =document.querySelectorAll("body");
 var highScoreButEl = document.getElementById("highScoreButtons")
+var clearHighScoreEl = document.getElementById("clearHigh")
+var restartQuizEl = document.getElementById("restart")
+let timeLeft;
+var questionNumber = 0;
+var score = 0;
+var mainHighScoreButEl = document.getElementById("highscoreButton")
+var highScoreArray = [];
 
 
 // function to start quiz by hiding the start button and unhiding the quiz
@@ -34,7 +34,7 @@ function startGame(){
 
 // // timer script
 function quizTimer(){
-    
+    timeLeft=59
     var timeInterval = setInterval(function(){
         timerEl.textContent = "Time: " + timeLeft;
         timeLeft--;    
@@ -43,71 +43,66 @@ function quizTimer(){
         timerEl.textContent = "";
         clearInterval(timeInterval);
         enterHighscore();
+        
     }
     }, 1000);
 }
-
-
 
 // Set up next question
 function setNextQuestion (){
     resetState()
     // showQuestion()
     questionEl.innerText = myQuestions[questionNumber].question;
-    for (i=0; i<myQuestions[questionNumber].answer.length; i++){
+    for (i=0; i < myQuestions[questionNumber].answer.length; i++){
         button = document.createElement("button")
         button.innerText = myQuestions[questionNumber].answer[i]
         answerListEl.appendChild(button)
-    }
-    answerQuestion()
-    }
+    }   
+    console.log(myQuestions[questionNumber].correctAnswer)
+    
+}
 
- function resetState() {
+function resetState() {
         while (answerListEl.firstChild) {
             answerListEl.removeChild(answerListEl.firstChild)
         }
-      }   
+}   
 
 // Answer question  
-function answerQuestion(){  
-    var correctChoice =  myQuestions[questionNumber].correctAnswer   
     answerListEl.addEventListener("click",function(event){
         event.preventDefault();
+        var correctChoice =  myQuestions[questionNumber].correctAnswer   
+        console.log(questionNumber)
         if(event.target.matches("button")){
             console.log(event.target.innerText)
             var userAnswer = event.target.innerText
+            questionNumber++
         }
-       
-            if(userAnswer == correctChoice){
+            if(userAnswer === correctChoice){
                 console.log("Correct")
-                questionNumber++
                 score = score + 10;
                 userScoreEl.textContent = score
-                if(questionNumber < myQuestions.length){setNextQuestion()}
+                if(questionNumber < myQuestions.length){
+                    setNextQuestion()
+                }
                 else{
-                    enterHighscore()
-                    timeleft = 0
+                    timeLeft = 0
+                    enterHighscore()   
                 }
                 
             }
             else {
-                console.log("Wrong")
-                questionNumber++                
+                console.log("Wrong")          
                 if(questionNumber < myQuestions.length){
                     setNextQuestion()
                     timeLeft = timeLeft -5
-                    
                 }
                 else{
-                    enterHighscore()
                     timeLeft = 0
+                    enterHighscore()
                 }
-            }
-        
-        
+            }    
     });
-};
-
 
 
 function enterHighscore(){
@@ -116,20 +111,6 @@ function enterHighscore(){
     
 }
 
-// Question Arrary
-var myQuestions = [
-    {   question: "Primarily, inside which tag of an HTML document do you put the JavaScript?",
-        answer:["<java>", "<body>", "<script>", "<img>"],
-        correctAnswer: "<script>",
-    },
-    {   question: "question 2",
-        answer:["w","x","y","z"],
-        correctAnswer: "w",
-    },
-
-];
-
-
 submitEl.addEventListener("click", recordHighscore)
 
 function recordHighscore (event){    
@@ -137,12 +118,18 @@ function recordHighscore (event){
     event.preventDefault();   
     userInt = userIdEl.value
     console.log(userInt)
+    highScoreArray = [];
     highScoreArray = JSON.parse(localStorage.getItem("highScoreArray") || "[]")
     highScoreArray.push({name:userInt,score:score})
     highScoreArray.sort(function(a,b){
         return b.score - a.score
         })    
     localStorage.setItem("highScoreArray",JSON.stringify(highScoreArray));
+    console.log("Check")
+    scoreEl.classList.add("hide");
+    startButtonEl.classList.add("hide");
+    highScoreEl.classList.remove("hide");
+    highScoreButEl.classList.remove("hide");
     showHighScores()
     console.log(highScoreArray)
    
@@ -152,12 +139,6 @@ function recordHighscore (event){
 // Create Highscore List
 function showHighScores(){
   
-    console.log("Check")
-    scoreEl.classList.add("hide");
-    startButtonEl.classList.add("hide");
-    highScoreEl.classList.remove("hide");
-    highScoreButEl.classList.remove("hide");
-
     for(var i =0; i<highScoreArray.length;i++){
 
         var rowEl = document.createElement("div")
@@ -175,68 +156,70 @@ function showHighScores(){
 }
 
 
-// clear
-// localStorage.clear();
-// history.back
+restartQuizEl.addEventListener("click",function(){
+    console.log("restart")
+    event.preventDefault();  
+    highScoreEl.classList.add("hide");
+    highScoreButEl.classList.add("hide");
+    questionNumber = 0
+    timeLeft = 59
+    score = 0
+    startGame()
+});
 
-// restart
+clearHighScoreEl.addEventListener("click",function(){
+    event.preventDefault() 
+    console.log("clear")
+    localStorage.clear()
+    while (highScoreEl.firstChild) {
+        highScoreEl.removeChild(highScoreEl.firstChild)
+    }
+    var rowEl = document.createElement("div")
+        rowEl.setAttribute("class","row")
+        var intials = document.createElement("strong")
+        intials.setAttribute("class","col-6")
+        intials.textContent =  "Initials"
+        var score = document.createElement("strong")
+        score.setAttribute("class","col-6")
+        score.textContent = "Score"
+        rowEl.appendChild(intials)
+        rowEl.appendChild(score)
+        highScoreEl.appendChild(rowEl)
+});
 
-// highscore = JSON.parse(localStorage.getItem("highscore")||"[]"),
+mainHighScoreButEl.addEventListener("click",function(){
+    console.log("Check")
+    scoreEl.classList.add("hide");
+    startButtonEl.classList.add("hide");
+    highScoreEl.classList.remove("hide");
+    highScoreButEl.classList.remove("hide");
+    showHighScores()    
 
+})
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// var questions = [
-//     {
-//         title: "Primarily, inside which tag of an HTML document do you put the JavaScript?",
-//         choices: ["<java>", "<body>", "<script>", "<img>"],
-//         answer: "<script>"
-//     },
-//     {
-//         title: "The condition in an if/else statement is enclosed within ______.",
-//         choices: ["quotes", "curly brackets", "parentheses", "square brackets"],
-//         answer: "parentheses"
-//     },
-//     {
-//         title: "What is the syntax for referencing an external script called 'abc.js'?",
-//         choices: ["<script class='abc.js'>", "<script href='abc.js'>", "<script link='abc.js'>", "<script src='abc.js'>"],
-//         answer: "<script src='abc.js'>"
-//     },
-//     {
-//         title: "Which type of pop up box will allow a user to type a response?",
-// //         choices: ["input", "prompt", "alert", "confirm"],
-// //         answer: "prompt"
-// //     },
-// //     {
-// //         title: "What is a DOM in JavaScript?",
-// //         choices: ["Data of Mine", "Document of Master", "Data Object Modal", "Document Object Model"],
-// answer: "Document Object Model"
-// },
-// {
-//     title: "Is JS case-sensitive?",
-//     choices: ["Yes", "No", "I have no clue", "Only when it feels like it."],
-//     answer: "Yes"
-// },
-// ];
+// Question Arrary
+var myQuestions = [
+    {   question: "Primarily, inside which tag of an HTML document do you put the JavaScript?",
+        answer:["<java>", "<body>", "<script>", "<img>"],
+        correctAnswer: "<script>",
+    },
+    {   question: "What is a DOM in JavaScript?",
+        answer:["Data of Mine", "Document of Master", "Data Object Modal", "Document Object Model"],
+        correctAnswer: "Document Object Model",
+    },
+    {   question: "Where is the correct place to insert a JavaScript?",
+        answer:["The <head> section", "The <body> section" , "Both the <body> and <head> section", "the <java> section"],
+        correctAnswer: "The <body> section",
+    },
+    {   question: "How do you create a function in JavaScript?",
+        answer:["DoThis myFunction", "function:myFunction()" , "function = myFunction()", "function myfunction()"],
+        correctAnswer: "function myfunction()",
+    },
+    {   question: "How do you call a function named myFunction?",
+        answer:["do myFunction", "myFunction()" , "call myFunction()", "hello myFunction"],
+        correctAnswer: "myFunction()",
+    }
+];
 
 
 
