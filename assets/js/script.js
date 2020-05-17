@@ -211,6 +211,7 @@ clearHighScoreEl.addEventListener("click",function(){
 mainHighScoreButEl.addEventListener("click",function(){
     if(quizInProgress){
         timeLeft = 0
+        userScoreEl.textContent = score
     }
     else{
     console.log("Check")
