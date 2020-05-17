@@ -19,6 +19,7 @@ var questionNumber = 0;
 var score = 0;
 var mainHighScoreButEl = document.getElementById("highscoreButton")
 var highScoreArray = [];
+var quizInProgress = false;
 
 
 // function to start quiz by hiding the start button and unhiding the quiz
@@ -30,6 +31,7 @@ function startGame(){
     quizEl.classList.remove("hide");
     quizTimer();  
     setNextQuestion(); 
+    quizInProgress = true;
     }
 
 // // timer script
@@ -118,13 +120,12 @@ function recordHighscore (event){
     event.preventDefault();   
     userInt = userIdEl.value
     console.log(userInt)
-    highScoreArray = [];
-    highScoreArray = JSON.parse(localStorage.getItem("highScoreArray") || "[]")
+    retrieveHighscore() 
     highScoreArray.push({name:userInt,score:score})
     highScoreArray.sort(function(a,b){
         return b.score - a.score
         })    
-    localStorage.setItem("highScoreArray",JSON.stringify(highScoreArray));
+    storeHighscore()
     console.log("Check")
     scoreEl.classList.add("hide");
     startButtonEl.classList.add("hide");
@@ -135,10 +136,30 @@ function recordHighscore (event){
    
 }
 
+function storeHighscore(){
+    localStorage.setItem("highScoreArray",JSON.stringify(highScoreArray));
+}
+
+function retrieveHighscore(){
+    highScoreArray = JSON.parse(localStorage.getItem("highScoreArray") || "[]")
+}
 
 // Create Highscore List
 function showHighScores(){
-  
+    while (highScoreEl.firstChild) {
+        highScoreEl.removeChild(highScoreEl.firstChild)
+    }
+    var rowEl = document.createElement("div")
+        rowEl.setAttribute("class","row")
+        var intials = document.createElement("strong")
+        intials.setAttribute("class","col-6")
+        intials.textContent =  "Initials"
+        var score = document.createElement("strong")
+        score.setAttribute("class","col-6")
+        score.textContent = "Score"
+        rowEl.appendChild(intials)
+        rowEl.appendChild(score)
+        highScoreEl.appendChild(rowEl)
     for(var i =0; i<highScoreArray.length;i++){
 
         var rowEl = document.createElement("div")
@@ -188,12 +209,17 @@ clearHighScoreEl.addEventListener("click",function(){
 });
 
 mainHighScoreButEl.addEventListener("click",function(){
+    if(quizInProgress){
+        timeLeft = 0
+    }
+    else{
     console.log("Check")
     scoreEl.classList.add("hide");
     startButtonEl.classList.add("hide");
     highScoreEl.classList.remove("hide");
     highScoreButEl.classList.remove("hide");
-    showHighScores()    
+    showHighScores()  
+    }  
 
 })
 
